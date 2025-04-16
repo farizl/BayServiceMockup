@@ -8,6 +8,10 @@ const port = 3000;
 app.use(express.json({ limit: '50mb' })); // Increase the limit to 50MB
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+app.get("/",(req,res) => {
+    res.send("Online");
+})
+
 app.get("/health",(req,res) => {
     res.send("Health");
 })
