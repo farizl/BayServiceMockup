@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node functions/app.js",
-    "build" : "netlify deploy --prod"
+    "start": "node functions/app.js"
   },
   "keywords": [],
   "author": "",
