@@ -1,23 +1,26 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { v4 as uuidv4 } from 'uuid';
+import serverless from "serverless-http";
 
 const app = express();
 const port = 3000;
+const router = express.Router();
 
 app.use(express.json({ limit: '50mb' })); // Increase the limit to 50MB
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-app.get("/",(req,res) => {
+
+router.get("/",(req,res) => {
     res.send("Online");
 })
 
-app.get("/health",(req,res) => {
+router.get("/health",(req,res) => {
     res.send("Health");
 })
 
 // UAM Mockup
-app.post("/api/v1/authen/login",(req,res) => {
+router.post("/api/v1/authen/login",(req,res) => {
     console.log(req.headers)
     console.log(req.body);
     switch(req.body.username){
@@ -245,7 +248,7 @@ app.post("/api/v1/authen/login",(req,res) => {
 })
 
 // Internal API Mockup
-app.post("/ipro-main/api/v1/th/internal/ecm/upload",(req,res) => {
+router.post("/ipro-main/api/v1/th/internal/ecm/upload",(req,res) => {
     console.log(req.headers);
     console.log(req.body)
     res.json(
@@ -268,7 +271,7 @@ app.post("/ipro-main/api/v1/th/internal/ecm/upload",(req,res) => {
 
 })
 
-app.post("/ipro-main/api/v1/th/internal/dopa/laser",(req,res) => {
+router.post("/ipro-main/api/v1/th/internal/dopa/laser",(req,res) => {
     res.json(
         {
         "content": {
@@ -288,7 +291,7 @@ app.post("/ipro-main/api/v1/th/internal/dopa/laser",(req,res) => {
     )
 })
 
-app.post("/ipro-main/api/v1/th/internal/dopa/chip",(req,res) => {
+router.post("/ipro-main/api/v1/th/internal/dopa/chip",(req,res) => {
     res.json({
         "content": {
             "code": "0",
@@ -306,16 +309,17 @@ app.post("/ipro-main/api/v1/th/internal/dopa/chip",(req,res) => {
     })
 })
 
-app.post("/ipassport/api/v1/auth/ex",(req,res) => {
+router.post("/ipassport/api/v1/auth/ex",(req,res) => {
     console.log(req.headers);
     console.log(req.body);
 })
 
-app.post("/ipassport/api/v1/auth/login",(req,res) => {
+router.post("/ipassport/api/v1/auth/login",(req,res) => {
     console.log(req.headers);
     console.log(req.body);
 })
 
-app.listen(port,() => {
-    console.log(`http://localhost:${port}`)
-})
+
+
+app.use("/.netlify/function/app",router);
+module.exports.handler = serverless(app);
