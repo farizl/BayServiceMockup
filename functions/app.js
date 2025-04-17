@@ -321,5 +321,5 @@ router.post("/ipassport/api/v1/auth/login",(req,res) => {
 
 
 
-app.use("/.netlify/function/app",router);
+app.use("/.netlify/functions/app",router);
 module.exports.handler = serverless(app);
